@@ -11,6 +11,7 @@ setup_git() {
 
 commit_website_files() {
   git add project-native/src/binding/resources/native/*
+  git status
   git commit --message "[skip ci] Updating native binaries for latest build: $TRAVIS_BUILD_NUMBER"
 }
 
@@ -19,8 +20,11 @@ upload_files() {
   git push --quiet --set-upstream origin-pushback ${TRAVIS_BRANCH}
 }
 
-if ${TRAVIS_PULL_REQUEST} = 'false'; then
+if ["${TRAVIS_PULL_REQUEST}" == "false"]; then
+  echo "Pushing binaries"
   setup_git
   commit_website_files
   upload_files
+else
+  echo "Skipping push"
 fi
