@@ -17,7 +17,7 @@ commit_website_files() {
 
 upload_files() {
   git remote add origin-pushback https://${GH_TOKEN}@github.com/jvpichowski/swig-template.git > /dev/null 2>&1
-  git push --set-upstream origin-pushback
+  git push origin-pushback ${TRAVIS_BRANCH}
 }
 
 if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
