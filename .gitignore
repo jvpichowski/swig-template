@@ -1,0 +1,6 @@
+
+.gradle
+.idea
+swig-template.iml
+**/build
+application/*.so

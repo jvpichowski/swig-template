@@ -1,0 +1,144 @@
+project(':project-native:base'){
+    apply plugin: 'base'
+
+    task createBuildDir() {
+        doFirst {
+            mkdir '../build/base'
+        }
+    }
+
+    task executeCMake(type:Exec) {
+        dependsOn createBuildDir
+        workingDir '../build/base'
+        commandLine 'cmake', '../../src/base'
+    }
+
+    task executeMake(type:Exec) {
+        dependsOn executeCMake
+        workingDir '../build/base'
+        commandLine 'make'
+    }
+
+    task publishBinary64(type:Copy){
+        dependsOn executeMake
+        from file('../build/base/libs/libproject_64.so')
+        into '../src/binding/resources/native/linux/x86_64/'
+        rename 'libproject_64.so', 'libproject.so'
+    }
+
+
+    task publishBinary32(type:Copy){
+        dependsOn executeMake
+        from file('../build/base/libs/libproject_32.so')
+        into '../src/binding/resources/native/linux/x86/'
+        rename 'libproject_32.so', 'libproject.so'
+    }
+
+    task publishBinary(){
+        dependsOn publishBinary32
+        dependsOn publishBinary64
+    }
+
+
+    clean {
+        delete '../build/base/'
+    }
+}
+
+project(':project-native:swig'){
+    apply plugin: 'base'
+
+    task deleteSwigFiles(type: Delete) {
+        delete '../src/binding/java/de/jvpichowski/project'
+    }
+
+    task createSwigDir {
+        dependsOn deleteSwigFiles
+        doFirst {
+            mkdir '../src/binding/java/de/jvpichowski/project'
+        }
+    }
+
+    task executeSwig(type:Exec) {
+        dependsOn createSwigDir
+        workingDir '../src/swig'
+        commandLine 'swig', 
+                        '-c++', '-java', 
+                        '-package', 'de.jvpichowski.project', 
+                        '-outdir', '../binding/java/de/jvpichowski/project',
+                        'project.i'
+    }
+
+    task renameWrapper {
+        dependsOn executeSwig
+        doLast {
+            file('../src/swig/project_wrap.cxx').renameTo(file('../src/swig/project_wrap.cpp'))
+        }
+    }
+
+    task createBuildDir() {
+        dependsOn renameWrapper
+        doFirst {
+            mkdir '../build/swig'
+        }
+    }
+
+    task executeCMake(type:Exec) {
+        dependsOn createBuildDir
+        dependsOn ':project-native:base:executeMake'
+        workingDir '../build/swig'
+        commandLine 'cmake', '-DCMAKE_PREFIX_PATH=../../build/base/libs', '../../src/swig'
+    }
+
+    task executeMake(type:Exec) {
+        dependsOn executeCMake
+        workingDir '../build/swig'
+        commandLine 'make'
+    }
+
+    task publishBinary64(type:Copy){
+        dependsOn executeMake
+        from file('../build/swig/libs/libproject_binding_64.so')
+        into '../src/binding/resources/native/linux/x86_64/'
+        rename 'libproject_binding_64.so', 'libproject_binding.so'
+    }
+
+
+    task publishBinary32(type:Copy){
+        dependsOn executeMake
+        from file('../build/swig/libs/libproject_binding_32.so')
+        into '../src/binding/resources/native/linux/x86/'
+        rename 'libproject_binding_32.so', 'libproject_binding.so'
+    }
+
+    task publishBinary(){
+        dependsOn publishBinary32
+        dependsOn publishBinary64
+    }
+
+    clean {
+        delete '../build/swig/*'
+    }
+}
+
+project(':project-native:binding'){
+    apply plugin: 'java'
+
+    buildDir = '../build/binding'
+
+    compileJava.dependsOn ':project-native:base:publishBinary'
+    compileJava.dependsOn ':project-native:swig:publishBinary'
+
+    sourceSets {
+        main {
+            java {
+                srcDirs = ['../src/binding/java']
+            }
+            resources {
+                srcDirs = ['../src/binding/resources']
+                //srcDirs = ['../build/swig/libs', '../build/base/libs']
+            }
+        }
+    }
+
+}

@@ -1,0 +1,8 @@
+language: java
+
+before_install:
+  - ./installDependencies
+script:
+  - ./gradlew application:run --info
+  - ./publishBinaries.sh
+

@@ -1,0 +1,8 @@
+include ':utils-natives'
+include ':project-native:base'
+include ':project-native:swig'
+include ':project-native:binding'
+include ':wrapper'
+include ':application'
+
+rootProject.name = 'swig-template'
