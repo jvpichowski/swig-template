@@ -37,6 +37,22 @@ task executeCMakeWindows64(type:Exec) {
                 '../../src/base'
 }
 
+task executeCMakeDarwin64(type:Exec) {
+    dependsOn createBuildDir
+    workingDir '../build/base'
+    commandLine 'cmake', 
+                '-DCMAKE_TOOLCHAIN_FILE=../../toolchains/darwin_clang64.cmake',
+                '../../src/base'
+}
+
+task executeCMakeDarwin32(type:Exec) {
+    dependsOn createBuildDir
+    workingDir '../build/base'
+    commandLine 'cmake', 
+                '-DCMAKE_TOOLCHAIN_FILE=../../toolchains/darwin_clang32.cmake',
+                '../../src/base'
+}
+
 task executeMake(type:Exec) {
     workingDir '../build/base'
     commandLine 'make'
@@ -46,6 +62,8 @@ executeMake.mustRunAfter executeCMakeLinux32
 executeMake.mustRunAfter executeCMakeLinux64
 executeMake.mustRunAfter executeCMakeWindows32
 executeMake.mustRunAfter executeCMakeWindows64
+executeMake.mustRunAfter executeCMakeDarwin32
+executeMake.mustRunAfter executeCMakeDarwin64
 
 task publishBinaryLinux64(type:Copy){
     dependsOn executeCMakeLinux64
@@ -73,4 +91,18 @@ task publishBinaryWindows32(type:Copy){
     dependsOn executeMake
     from file('../build/base/libproject.dll')
     into '../src/binding/resources/native/windows/x86/'
+}
+
+task publishBinaryDarwin32(type:Copy){
+    dependsOn executeCMakeDarwin32
+    dependsOn executeMake
+    from file('../build/base/libproject.dylib')
+    into '../src/binding/resources/native/darwin/x86/'
+}
+
+task publishBinaryDarwin64(type:Copy){
+    dependsOn executeCMakeDarwin64
+    dependsOn executeMake
+    from file('../build/base/libproject.dylib')
+    into '../src/binding/resources/native/darwin/x86_64/'
 }

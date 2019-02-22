@@ -79,6 +79,28 @@ task executeCMakeWindows32(type:Exec) {
                 '../../src/swig'
 }
 
+task executeCMakeDarwin32(type:Exec) {
+    dependsOn createBuildDir
+    dependsOn ':project-native:base:executeCMakeDarwin32'
+    dependsOn ':project-native:base:executeMake'
+    workingDir '../build/swig'
+    commandLine 'cmake', 
+                '-DCMAKE_TOOLCHAIN_FILE=../../toolchains/darwin_clang32.cmake',
+                '-DCMAKE_PREFIX_PATH=../../build/base', 
+                '../../src/swig'
+}
+
+task executeCMakeDarwin64(type:Exec) {
+    dependsOn createBuildDir
+    dependsOn ':project-native:base:executeCMakeDarwin64'
+    dependsOn ':project-native:base:executeMake'
+    workingDir '../build/swig'
+    commandLine 'cmake', 
+                '-DCMAKE_TOOLCHAIN_FILE=../../toolchains/darwin_clang64.cmake',
+                '-DCMAKE_PREFIX_PATH=../../build/base', 
+                '../../src/swig'
+}
+
 task executeMake(type:Exec) {
     workingDir '../build/swig'
     commandLine 'make'
@@ -88,6 +110,8 @@ executeMake.mustRunAfter executeCMakeLinux64
 executeMake.mustRunAfter executeCMakeLinux32
 executeMake.mustRunAfter executeCMakeWindows64
 executeMake.mustRunAfter executeCMakeWindows32
+executeMake.mustRunAfter executeCMakeDarwin64
+executeMake.mustRunAfter executeCMakeDarwin32
 
 task publishBinaryLinux64(type:Copy){
     dependsOn executeCMakeLinux64
@@ -115,4 +139,18 @@ task publishBinaryWindows32(type:Copy){
     dependsOn executeMake
     from file('../build/swig/libproject_binding.dll')
     into '../src/binding/resources/native/windows/x86/'
+}
+
+task publishBinaryDarwin32(type:Copy){
+    dependsOn executeCMakeDarwin32
+    dependsOn executeMake
+    from file('../build/swig/libproject_binding.dylib')
+    into '../src/binding/resources/native/windows/x86/'
+}
+
+task publishBinaryDarwin64(type:Copy){
+    dependsOn executeCMakeDarwin64
+    dependsOn executeMake
+    from file('../build/swig/libproject_binding.dylib')
+    into '../src/binding/resources/native/windows/x86_64/'
 }

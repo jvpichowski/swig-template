@@ -10,10 +10,10 @@ if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
     ./gradlew :project-native:swig:publishBinaryWindows32
 elif [ "${TRAVIS_OS_NAME}" == "osx" ]; then
     echo "building binaries for osx"
-    ./gradlew :project-native:base:publishBinaryOsx64
-    ./gradlew :project-native:base:publishBinaryOsx32
-    ./gradlew :project-native:swig:publishBinaryOsx64
-    ./gradlew :project-native:swig:publishBinaryOsx32
+    ./gradlew :project-native:base:publishBinaryDarwin64
+    ./gradlew :project-native:base:publishBinaryDarwin32
+    ./gradlew :project-native:swig:publishBinaryDarwin64
+    ./gradlew :project-native:swig:publishBinaryDarwin32
 else 
     echo "target system is not supported: ${TRAVIS_OS_NAME}"
 fi
