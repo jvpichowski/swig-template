@@ -1,0 +1,118 @@
+task deleteSwigFiles(type: Delete) {
+    dependsOn clean
+    delete '../src/binding/java/de/jvpichowski/project'
+}
+
+task createSwigDir {
+    dependsOn deleteSwigFiles
+    doFirst {
+        mkdir '../src/binding/java/de/jvpichowski/project'
+    }
+}
+
+task executeSwig(type:Exec) {
+    dependsOn createSwigDir
+    workingDir '../src/swig'
+    commandLine 'swig', 
+                    '-c++', '-java', 
+                    '-package', 'de.jvpichowski.project', 
+                    '-outdir', '../binding/java/de/jvpichowski/project',
+                    'project.i'
+}
+
+task renameWrapper {
+    dependsOn executeSwig
+    doLast {
+        file('../src/swig/project_wrap.cxx').renameTo(file('../src/swig/project_wrap.cpp'))
+    }
+}
+
+task createBuildDir() {
+    dependsOn renameWrapper
+    doFirst {
+        mkdir '../build/swig'
+    }
+}
+
+task executeCMakeLinux64(type:Exec) {
+    dependsOn createBuildDir
+    dependsOn ':project-native:base:executeCMakeLinux64'
+    dependsOn ':project-native:base:executeMake'
+    workingDir '../build/swig'
+    commandLine 'cmake', 
+                '-DCMAKE_TOOLCHAIN_FILE=../../toolchains/ubuntu_g++64.cmake',
+                '-DCMAKE_PREFIX_PATH=../../build/base', 
+                '../../src/swig'
+}
+
+
+task executeCMakeLinux32(type:Exec) {
+    dependsOn createBuildDir
+    dependsOn ':project-native:base:executeCMakeLinux32'
+    dependsOn ':project-native:base:executeMake'
+    workingDir '../build/swig'
+    commandLine 'cmake', 
+                '-DCMAKE_TOOLCHAIN_FILE=../../toolchains/ubuntu_g++32.cmake',
+                '-DCMAKE_PREFIX_PATH=../../build/base', 
+                '../../src/swig'
+}
+
+task executeCMakeWindows64(type:Exec) {
+    dependsOn createBuildDir
+    dependsOn ':project-native:base:executeCMakeWindows64'
+    dependsOn ':project-native:base:executeMake'
+    workingDir '../build/swig'
+    commandLine 'cmake', 
+                '-DCMAKE_TOOLCHAIN_FILE=../../toolchains/ubuntu_mingw64.cmake',
+                '-DCMAKE_PREFIX_PATH=../../build/base', 
+                '../../src/swig'
+}
+
+task executeCMakeWindows32(type:Exec) {
+    dependsOn createBuildDir
+    dependsOn ':project-native:base:executeCMakeWindows32'
+    dependsOn ':project-native:base:executeMake'
+    workingDir '../build/swig'
+    commandLine 'cmake', 
+                '-DCMAKE_TOOLCHAIN_FILE=../../toolchains/ubuntu_mingw32.cmake',
+                '-DCMAKE_PREFIX_PATH=../../build/base', 
+                '../../src/swig'
+}
+
+task executeMake(type:Exec) {
+    workingDir '../build/swig'
+    commandLine 'make'
+}
+
+executeMake.mustRunAfter executeCMakeLinux64
+executeMake.mustRunAfter executeCMakeLinux32
+executeMake.mustRunAfter executeCMakeWindows64
+executeMake.mustRunAfter executeCMakeWindows32
+
+task publishBinaryLinux64(type:Copy){
+    dependsOn executeCMakeLinux64
+    dependsOn executeMake
+    from file('../build/swig/libproject_binding.so')
+    into '../src/binding/resources/native/linux/x86_64/'
+}
+
+task publishBinaryLinux32(type:Copy){
+    dependsOn executeCMakeLinux32
+    dependsOn executeMake
+    from file('../build/swig/libproject_binding.so')
+    into '../src/binding/resources/native/linux/x86/'
+}
+
+task publishBinaryWindows64(type:Copy){
+    dependsOn executeCMakeWindows64
+    dependsOn executeMake
+    from file('../build/swig/libproject_binding.dll')
+    into '../src/binding/resources/native/windows/x86_64/'
+}
+
+task publishBinaryWindows32(type:Copy){
+    dependsOn executeCMakeWindows32
+    dependsOn executeMake
+    from file('../build/swig/libproject_binding.dll')
+    into '../src/binding/resources/native/windows/x86/'
+}

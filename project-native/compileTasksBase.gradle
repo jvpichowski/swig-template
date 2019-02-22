@@ -1,0 +1,76 @@
+task createBuildDir() {
+    dependsOn clean
+    doFirst {
+        mkdir '../build/base'
+    }
+}
+
+task executeCMakeLinux32(type:Exec) {
+    dependsOn createBuildDir
+    workingDir '../build/base'
+    commandLine 'cmake', 
+                '-DCMAKE_TOOLCHAIN_FILE=../../toolchains/ubuntu_g++32.cmake',
+                '../../src/base'
+}
+
+task executeCMakeLinux64(type:Exec) {
+    dependsOn createBuildDir
+    workingDir '../build/base'
+    commandLine 'cmake', 
+                '-DCMAKE_TOOLCHAIN_FILE=../../toolchains/ubuntu_g++64.cmake',
+                '../../src/base'
+}
+
+task executeCMakeWindows32(type:Exec) {
+    dependsOn createBuildDir
+    workingDir '../build/base'
+    commandLine 'cmake', 
+                '-DCMAKE_TOOLCHAIN_FILE=../../toolchains/ubuntu_mingw32.cmake',
+                '../../src/base'
+}
+
+task executeCMakeWindows64(type:Exec) {
+    dependsOn createBuildDir
+    workingDir '../build/base'
+    commandLine 'cmake', 
+                '-DCMAKE_TOOLCHAIN_FILE=../../toolchains/ubuntu_mingw64.cmake',
+                '../../src/base'
+}
+
+task executeMake(type:Exec) {
+    workingDir '../build/base'
+    commandLine 'make'
+}
+
+executeMake.mustRunAfter executeCMakeLinux32
+executeMake.mustRunAfter executeCMakeLinux64
+executeMake.mustRunAfter executeCMakeWindows32
+executeMake.mustRunAfter executeCMakeWindows64
+
+task publishBinaryLinux64(type:Copy){
+    dependsOn executeCMakeLinux64
+    dependsOn executeMake
+    from file('../build/base/libproject.so')
+    into '../src/binding/resources/native/linux/x86_64/'
+}
+
+task publishBinaryLinux32(type:Copy){
+    dependsOn executeCMakeLinux32
+    dependsOn executeMake
+    from file('../build/base/libproject.so')
+    into '../src/binding/resources/native/linux/x86/'
+}
+
+task publishBinaryWindows64(type:Copy){
+    dependsOn executeCMakeWindows64
+    dependsOn executeMake
+    from file('../build/base/libproject.dll')
+    into '../src/binding/resources/native/windows/x86_64/'
+}
+
+task publishBinaryWindows32(type:Copy){
+    dependsOn executeCMakeWindows32
+    dependsOn executeMake
+    from file('../build/base/libproject.dll')
+    into '../src/binding/resources/native/windows/x86/'
+}

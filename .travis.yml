@@ -2,7 +2,15 @@ language: java
 before_install:
 - "./installDependencies.sh"
 script:
-- "./gradlew application:run --info"
+- "./gradlew :project-native:base:publishBinaryLinux64"
+- "./gradlew :project-native:base:publishBinaryLinux32"
+- "./gradlew :project-native:base:publishBinaryWindows64"
+- "./gradlew :project-native:base:publishBinaryWindows32"
+- "./gradlew :project-native:swig:publishBinaryLinux64"
+- "./gradlew :project-native:swig:publishBinaryLinux32"
+- "./gradlew :project-native:swig:publishBinaryWindows64"
+- "./gradlew :project-native:swig:publishBinaryWindows32"
+- "./gradlew :application:run"
 - "./publishBinaries.sh"
 env:
   global:
