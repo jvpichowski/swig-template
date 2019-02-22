@@ -10,7 +10,7 @@ if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
     sudo apt-get install -y swig cmake build-essential g++-multilib mingw-w64
 elif [ "${TRAVIS_OS_NAME}" == "osx" ]; then
     echo "installing dependencies for mac build"
-    brew install cmake
+#    brew install cmake
 else 
     echo "target system is not supported: ${TRAVIS_OS_NAME}"
 fi
