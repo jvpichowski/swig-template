@@ -13,7 +13,7 @@ commit_website_files() {
   git add project-native/src/binding/*
   git add project-native/src/swig/*
   git status
-  git commit --message "[skip ci] Updating native binaries from latest travis build: $TRAVIS_BUILD_NUMBER"
+  git commit --message "[skip ci] Updating native binaries from latest travis build: $TRAVIS_JOB_NUMBER"
 }
 
 upload_files() {
