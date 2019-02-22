@@ -145,12 +145,12 @@ task publishBinaryDarwin32(type:Copy){
     dependsOn executeCMakeDarwin32
     dependsOn executeMake
     from file('../build/swig/libproject_binding.dylib')
-    into '../src/binding/resources/native/windows/x86/'
+    into '../src/binding/resources/native/darwin/x86/'
 }
 
 task publishBinaryDarwin64(type:Copy){
     dependsOn executeCMakeDarwin64
     dependsOn executeMake
     from file('../build/swig/libproject_binding.dylib')
-    into '../src/binding/resources/native/windows/x86_64/'
+    into '../src/binding/resources/native/darwin/x86_64/'
 }
