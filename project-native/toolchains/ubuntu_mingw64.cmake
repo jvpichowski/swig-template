@@ -24,4 +24,4 @@ set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
-include_directories(/usr/lib/jvm/default-java/include;include/win32;)
+include_directories(include;include/win32;)

@@ -1,3 +1,3 @@
 set(CMAKE_SYSTEM_NAME Linux)
 
-include_directories(/usr/lib/jvm/default-java/include;/usr/lib/jvm/default-java/include/linux;)
+include_directories(include;include/linux;)
