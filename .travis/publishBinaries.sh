@@ -24,6 +24,7 @@ upload_files() {
   git push --set-upstream origin-pushback ${TRAVIS_BRANCH}
 }
 
+find .
 if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
   echo "Pushing binaries"
   setup_git
