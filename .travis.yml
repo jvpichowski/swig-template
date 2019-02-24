@@ -8,6 +8,15 @@ script:
   - ".travis/buildBinaries.sh"
   - "./gradlew :application:run"
   - ".travis/publishBinaries.sh"
+deploy:
+  provider: releases
+  api_key: GH_TOKEN
+  file_glob: true
+  file: application/build/distributions/*
+  skip_cleanup: true
+  on:
+    tags: true
+
 env:
   global:
     secure: fVWRMFaZFoy+5B6T7b8uFiFo3RB1gJ5EVp+fxkuWihwITCreZlgl0VoRWb+i8D8MEJJhDxECCZ0KVgfcNyeumzVqMahTbxkKpFlUtIRNqRdUzx6xWwbJay28P542fd6bbLpqc956zm4McdH3edpYfRw5M28B/BcgGiUg/57RhoJlHcIuL2Gt9SeGWSwMgWRDW7/IsILVLyBxX0ImILtjXD7MwffupqfZegR8RyU0lJ41uw5HhNQOIdexNc4A/BtGaWAry6LKKkjX6pWMsPtredwNTcFqFA063i4WuC7ITfulKPjnxrfNNwQ3s6ogO73eAqw8VDAN73xb7GeAXmS9XTPZhjgGAp2BXy1o9cXCiH0VUd/p0g936W0vdqtd97gar21a5yfMzNvnFcQkKEU31c+ey9XtO1rgn2mQuiDbA5pggyKinRouwEOZ1/RGbjvpTMOpMNRgZIfRtwgbbAGXIdVLFVBaQCdx5/zNUvY25Jb52HRqonJT70VRJRW/YzdsJlpvcg42v+1Y182pbCaTsNb36ZDaXYBrDwDYg13oEfkFM9+828ypjpX0IQMirI8c1OQIwjn/HHbe2mu60he8OFI8joqiKfLle2tD9CpJ2gvaMb9Lp2jvSuy23kkh3T3rANVgT1D2hFyUzbHDvs6qXfp2VBffb38tzAw4NA9M2Q0=
