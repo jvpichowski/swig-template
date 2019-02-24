@@ -1,24 +1,23 @@
 language: java
 os:
-  - linux
-  - osx
+- linux
+- osx
 before_install:
-  - ".travis/installDependencies.sh"
+- ".travis/installDependencies.sh"
 script:
-  - "set -e"
-  - ".travis/buildBinaries.sh"
-  - "./gradlew :application:run"
-  - ".travis/publishBinaries.sh"
-  - "set +e"
+- set -e
+- ".travis/buildBinaries.sh"
+- "./gradlew :application:run"
+- ".travis/publishBinaries.sh"
+- set +e
 deploy:
   provider: releases
-  api_key: GH_TOKEN
-  file_glob: true
+  api_key:
+    secure: bp5r4NCYU654I1MGgGQtytjZLI8qZTA8sdKDWeGvzPHoQuYToDOG+HuHPCho/DsztCI76uvz1pTeJ9iymKPYPCXbg2s012NOmu7JEGIiJFSXNtoUwRirC4gjjnP9Eey9GwohRRmz/SqjWyEHbQbrySupK9OtY9pG33bi1ArumlGBqe+fpACqyOZiVF7DisJSR2H5Pd8kvo7RcQP9ABvzLuu9Rt6oF47/RxtXdTUIFQRiG/QeTsyrEsCHFMJKlz/qLp2spsnpysH5mctUovGw2OJvugIkdvtCZRD9aBX9C1jKn9D4QWv1pK20LJR8h7ZjpcgGClCq+bKk6oOLFwd7BF1n9EBjH2cQQGyvyZftZBwiuvxf3bDEckJQ/AUina6sM8ElxBKwoLlTeCOo/D0MCc93Cv2Vdp6cfci2plLmkfl9Ry89dN+aJbs31MrztnZFzjNGrkVN6QaFEf7c0VybtOdJCCR86I6nUPB6TJ3XodRKVnfb8ixU883/ZPT3yDDFu04O3nmE/05focHS7ArU9OQz/7iQ3CAgTIYJ2CixPC9wk0HtU+2D5n4DJLJZHwfUVwiqjYsjKODThV2seDgpglapwiESR03abvC9XNgHB80MyBSsAhULmbt+O9xICMqwG7U9XrinJeZVeQ9iaHVEP3zxujNyQUXffChhF8dVL0g=
   file: application/build/distributions/*
-  skip_cleanup: true
   on:
     tags: true
-
+    repo: jvpichowski/swig-template
 env:
   global:
     secure: fVWRMFaZFoy+5B6T7b8uFiFo3RB1gJ5EVp+fxkuWihwITCreZlgl0VoRWb+i8D8MEJJhDxECCZ0KVgfcNyeumzVqMahTbxkKpFlUtIRNqRdUzx6xWwbJay28P542fd6bbLpqc956zm4McdH3edpYfRw5M28B/BcgGiUg/57RhoJlHcIuL2Gt9SeGWSwMgWRDW7/IsILVLyBxX0ImILtjXD7MwffupqfZegR8RyU0lJ41uw5HhNQOIdexNc4A/BtGaWAry6LKKkjX6pWMsPtredwNTcFqFA063i4WuC7ITfulKPjnxrfNNwQ3s6ogO73eAqw8VDAN73xb7GeAXmS9XTPZhjgGAp2BXy1o9cXCiH0VUd/p0g936W0vdqtd97gar21a5yfMzNvnFcQkKEU31c+ey9XtO1rgn2mQuiDbA5pggyKinRouwEOZ1/RGbjvpTMOpMNRgZIfRtwgbbAGXIdVLFVBaQCdx5/zNUvY25Jb52HRqonJT70VRJRW/YzdsJlpvcg42v+1Y182pbCaTsNb36ZDaXYBrDwDYg13oEfkFM9+828ypjpX0IQMirI8c1OQIwjn/HHbe2mu60he8OFI8joqiKfLle2tD9CpJ2gvaMb9Lp2jvSuy23kkh3T3rANVgT1D2hFyUzbHDvs6qXfp2VBffb38tzAw4NA9M2Q0=
