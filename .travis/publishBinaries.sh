@@ -25,7 +25,7 @@ upload_files() {
   git push --set-upstream origin-pushback ${TRAVIS_BRANCH}
 }
 
-if [ "${TRAVIS_PULL_REQUEST}" == "false" ] && [ "${TRAVIS_TAG}" != "" ]; then
+if [ "${TRAVIS_PULL_REQUEST}" == "false" ] && [ "${TRAVIS_TAG}" == "" ]; then
   echo "Pushing binaries"
   setup_git
   commit_website_files
