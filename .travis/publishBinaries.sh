@@ -20,9 +20,9 @@ upload_files() {
   git remote add origin-pushback https://${GH_TOKEN}@github.com/jvpichowski/swig-template.git > /dev/null 2>&1
   git branch travis-binary-deployment 
   git checkout ${TRAVIS_BRANCH}
-  git pull --no-edit
   git merge travis-binary-deployment
-  git commit --amend -m "[skip ci] Merge branch 'travis-binary-deployment'"
+  git pull --no-edit
+  git commit --amend -m "[skip ci] added published binaries"
   git push --set-upstream origin-pushback ${TRAVIS_BRANCH}
 }
 
