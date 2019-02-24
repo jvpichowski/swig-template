@@ -32,7 +32,7 @@ upload_files() {
   git add -v project-native/src/swig/*
   git commit -v -m "[ci skip] project: update $TRAVIS_OS_NAME natives"
   git pull -q --rebase
-  git push git@github.com:jvpichowski/swig-template.git
+  git push https://${GH_TOKEN}@github.com/jvpichowski/swig-template.git
 }
 
 if [ "${TRAVIS_PULL_REQUEST}" == "false" ] && [ "${TRAVIS_TAG}" == "" ]; then
