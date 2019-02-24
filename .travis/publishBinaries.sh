@@ -17,13 +17,14 @@ commit_website_files() {
 }
 
 upload_files() {
-  git remote add origin-pushback https://${GH_TOKEN}@github.com/jvpichowski/swig-template.git > /dev/null 2>&1
-  git branch travis-binary-deployment 
-  git checkout ${TRAVIS_BRANCH}
-  git merge travis-binary-deployment
+  #git remote add origin-pushback https://${GH_TOKEN}@github.com/jvpichowski/swig-template.git > /dev/null 2>&1
+  #git branch travis-binary-deployment 
+  #git checkout ${TRAVIS_BRANCH}
+  #git merge travis-binary-deployment
   git pull --no-edit
-  git commit --amend -m "[skip ci] added published binaries"
-  git push --set-upstream origin-pushback ${TRAVIS_BRANCH}
+  git commit --amend -m "[skip ci] Updating native binaries from latest travis build: $TRAVIS_JOB_NUMBER"
+  git push
+  #git push --set-upstream origin-pushback ${TRAVIS_BRANCH}
 }
 
 if [ "${TRAVIS_PULL_REQUEST}" == "false" ] && [ "${TRAVIS_TAG}" == "" ]; then
