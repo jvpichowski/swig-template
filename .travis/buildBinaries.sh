@@ -14,10 +14,6 @@ elif [ "${TRAVIS_OS_NAME}" == "osx" ]; then
     ./gradlew :project-native:base:publishBinaryDarwin32
     ./gradlew :project-native:swig:publishBinaryDarwin64
     ./gradlew :project-native:swig:publishBinaryDarwin32
-    otool -L project-native/src/binding/resources/native/darwin/x86_64/libproject.dylib
-    otool -L project-native/src/binding/resources/native/darwin/x86_64/libproject_binding.dylib
-    otool -L project-native/src/binding/resources/native/darwin/x86/libproject.dylib
-    otool -L project-native/src/binding/resources/native/darwin/x86/libproject_binding.dylib
 else 
     echo "target system is not supported: ${TRAVIS_OS_NAME}"
 fi

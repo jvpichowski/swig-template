@@ -5,9 +5,11 @@ os:
 before_install:
   - ".travis/installDependencies.sh"
 script:
+  - "set -e"
   - ".travis/buildBinaries.sh"
   - "./gradlew :application:run"
   - ".travis/publishBinaries.sh"
+  - "set +e"
 deploy:
   provider: releases
   api_key: GH_TOKEN
