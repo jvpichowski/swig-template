@@ -21,6 +21,7 @@ upload_files() {
   git branch traivs-binary-deployment 
   git checkout ${TRAVIS_BRANCH}
   git merge traivs-binary-deployment
+  git commit --amend -m "[skip ci] Merge branch 'travis-binary-deployment'"
   git push --set-upstream origin-pushback ${TRAVIS_BRANCH}
 }
 
